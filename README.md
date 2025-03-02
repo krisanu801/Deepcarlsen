@@ -113,3 +113,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Inspired by AlphaZero and Stockfish
 - Chess piece images should be attributed to their respective creators
 - Thanks to the python-chess and Pygame communities
+# Deepcarlsen
