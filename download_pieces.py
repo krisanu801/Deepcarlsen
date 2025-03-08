@@ -1,39 +1,42 @@
 import os
-import requests
+import matplotlib.pyplot as plt
 
-def download_piece(piece_name, url, save_path):
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(save_path, 'wb') as f:
-            f.write(response.content)
-        print(f"Downloaded {piece_name}")
-    else:
-        print(f"Failed to download {piece_name}")
+# Unicode symbols for chess pieces
+chess_pieces = {
+    "wk": "♔",  # White King
+    "wq": "♕",  # White Queen
+    "wr": "♖",  # White Rook
+    "wb": "♗",  # White Bishop
+    "wn": "♘",  # White Knight
+    "wp": "♙",  # White Pawn
+    "bk": "♚",  # Black King
+    "bq": "♛",  # Black Queen
+    "br": "♜",  # Black Rook
+    "bb": "♝",  # Black Bishop
+    "bn": "♞",  # Black Knight
+    "bp": "♟",  # Black Pawn
+}
 
-def main():
-    # Create assets directory if it doesn't exist
-    if not os.path.exists('assets'):
-        os.makedirs('assets')
+# Create assets folder if it doesn't exist
+os.makedirs("assets", exist_ok=True)
 
-    # Chess piece images from Wikimedia Commons (standard chess pieces)
-    pieces = {
-        'wk': 'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg',
-        'wq': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg',
-        'wr': 'https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg',
-        'wb': 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg',
-        'wn': 'https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg',
-        'wp': 'https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg',
-        'bk': 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Chess_kdt45.svg',
-        'bq': 'https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg',
-        'br': 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Chess_rdt45.svg',
-        'bb': 'https://upload.wikimedia.org/wikipedia/commons/9/98/Chess_bdt45.svg',
-        'bn': 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Chess_ndt45.svg',
-        'bp': 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg',
-    }
+def save_chess_piece(filename, symbol):
+    """Generate and save a chess piece image with no white background."""
+    fig, ax = plt.subplots(figsize=(1, 1), dpi=300)  # High resolution
+    ax.text(0.5, 0.5, symbol, fontsize=120, ha='center', va='center')  # Bigger size
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_frame_on(False)
+    ax.set_facecolor("none")  # Transparent background
 
-    for piece, url in pieces.items():
-        save_path = os.path.join('assets', f'{piece}.png')
-        download_piece(piece, url, save_path)
+    # Save image without padding & with transparency
+    filepath = os.path.join("assets", f"{filename}.png")
+    plt.savefig(filepath, dpi=300, bbox_inches="tight", pad_inches=0, transparent=True)
+    plt.close(fig)
+    print(f"Saved: {filepath}")
 
-if __name__ == "__main__":
-    main()
+# Generate and save all chess pieces
+for filename, symbol in chess_pieces.items():
+    save_chess_piece(filename, symbol)
+
+print("All chess pieces saved in the 'assets' folder without white areas!")
